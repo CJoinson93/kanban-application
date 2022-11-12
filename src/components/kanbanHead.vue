@@ -1,0 +1,36 @@
+<script setup>
+import addColumnButtonVue from './addColumnButton.vue';
+</script>
+
+<template>
+
+<div id="appHeader">
+    <div class="logo">PRODUCTIVUS</div>
+    <addColumnButtonVue></addColumnButtonVue>
+</div>
+
+
+
+
+</template>
+
+<style scoped>
+
+#appHeader{
+position: fixed;
+top: 0;
+left: 0;
+height:80px;
+width: 100%;
+background-color: blue;
+display: flex;
+flex-direction: row;
+column-gap: 30px;
+}
+
+.logo{
+    padding: 20px;
+    font-size:25px;
+}
+
+</style>
