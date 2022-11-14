@@ -6,8 +6,29 @@ import kanbanColumn from './kanbanColumn.vue'
 <template>
 
 <div class="board">
+    <kanbanColumn>
+        <template #col-head>
+            <h2>To Do</h2>
+        </template>
+    </kanbanColumn>
 
-    <kanbanColumn></kanbanColumn>x
+    <kanbanColumn>
+        <template #col-head>
+            <h2>In Progress</h2>
+        </template>
+    </kanbanColumn>
+
+    <kanbanColumn>
+        <template #col-head>
+            <h2>Check it Over</h2>
+        </template>
+    </kanbanColumn>
+
+    <kanbanColumn>
+        <template #col-head>
+            <h2>Completed</h2>
+        </template>
+    </kanbanColumn>
 </div>
 
 </template>
@@ -16,13 +37,13 @@ import kanbanColumn from './kanbanColumn.vue'
 
 .board{
     left:0;
+    column-gap: 8px;
     display: flex;
     flex-direction: row;
-    column-gap: 20px;
-    flex-wrap: nowrap;
     width: 100%;
     height:1000px;
-    background-color: lightblue;
+    background-color: #FFEEAF;
+    justify-content: space-evenly;
 }
 
 

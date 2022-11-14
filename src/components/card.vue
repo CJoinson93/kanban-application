@@ -1,13 +1,14 @@
 <script setup>
-import { ref } from 'vue'
-import { stringifyQuery } from 'vue-router'
-import kanbanColumnVue from './kanbanColumn.vue';
 
 </script>
 
 <template>
 
-<div class="card"></div>
+<div class="card">
+    
+    <p> {{title}} </p>
+
+</div>
 
 </template>
 
@@ -15,7 +16,7 @@ import kanbanColumnVue from './kanbanColumn.vue';
 
 .card{
     width:100%;
-    background-color: lightgoldenrodyellow;
+    background-color: #A5F1E9;
     height:80px;
     border-radius: 10px;
 }

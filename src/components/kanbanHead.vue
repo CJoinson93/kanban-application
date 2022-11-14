@@ -22,7 +22,7 @@ top: 0;
 left: 0;
 height:80px;
 width: 100%;
-background-color: blue;
+background-color: #7FBCD2;
 display: flex;
 flex-direction: row;
 column-gap: 30px;

@@ -3,11 +3,9 @@ import { ref } from 'vue'
 import kanbanColumnVue from './kanbanColumn.vue';
 
 const title = ref('')
-const description = ref ('')
+
 defineProps (['title'])
 defineEmits (['update:title'])
-
-
 </script>
 
 
@@ -17,11 +15,11 @@ defineEmits (['update:title'])
 
         <div class="input-group">
             <label for="title">Task Title</label>
-            <input type="text" name="title">
+            <input v-model="title" type="text" name="title">
         </div>
         <div class="input-group">
             <label for="title">Task Description</label>
-            <textarea v-model="description" name="description"></textarea>
+            <textarea name="description"></textarea>
         </div>
         <button @click="addToList">Submit</button>
 
