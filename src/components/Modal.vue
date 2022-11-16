@@ -47,6 +47,7 @@ const close = () => {
     background: white;
     padding:10px;
     width: 600px;
+    border-radius: 10px;
 }
 
 .modal-heading{
@@ -55,5 +56,7 @@ const close = () => {
     align-items: center;
     justify-content: space-between;
 }
+
+
 
 </style>

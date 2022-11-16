@@ -1,15 +1,11 @@
 <script setup>
-import addColumnButtonVue from './addColumnButton.vue';
 </script>
 
 <template>
 
 <div id="appHeader">
     <div class="logo">PRODUCTIVUS</div>
-    <addColumnButtonVue></addColumnButtonVue>
 </div>
-
-
 
 
 </template>

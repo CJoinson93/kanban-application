@@ -1,18 +1,30 @@
 <script setup>
+
 import { ref } from 'vue'
 import cardVue from './card.vue'
 import Modal from './Modal.vue'
+import addCardVue from './addCard.vue'
 
-//Model Script
-const isModalOpen = ref(false)
-const openModal = () => {
-  isModalOpen.value = true
-}
-const closeModal = () => {
-    isModalOpen.value = false
+const emit = defineEmits(['update-list-title'])
+const editing = ref(false)
+const listTitleEdit = ref(null)
+
+const props = defineProps(
+  {
+    list: {
+      type: Object,
+    }
+  }
+)
+
+const edit = () => {
+  editing.value = true
 }
 
-//Add a new card
+const saveEdit = () => {
+  emit('update-list-title', listTitleEdit.value.value)
+  editing.value = false
+}
 
 </script>
 
@@ -20,32 +32,30 @@ const closeModal = () => {
 
   <div id="column">
       <div class="columnTitle">
-        <slot name="col-head"></slot>
+        <h2 @click="edit">{{editing ? '&nbsp;' : list.title }}</h2>
+        <input
+          v-if="editing"
+          class="list__header-input"
+          type="text"
+          @change="saveEdit"
+          :value="list.title"
+          ref="listTitleEdit"
+        />
+
+       <!-- <slot name="col-head"></slot>-->
       </div>
 
-      <!--New Card Button-->
-        <button @click="openModal" class="addCard">+</button>
-
-   <modal :open="isModalOpen"  @close-modal="closeModal">
-      <template #header>
-        <h1>Add a New Card</h1>
-      </template>
-      <template #body>
-        <form>
-          <div class="input-group">
-            <label for="title">Task Title</label>
-            <input v-model="title" type="text" name="title">
-          </div>
-          <div class="input-group">
-            <label for="title">Task Description</label>
-            <textarea name="description"></textarea>
-          </div>
-          <button @click="closeModal, addToList">Submit</button>
-        </form>
-      </template>
-    </modal>
-    
-    <cardVue></cardVue>
+      <addCardVue
+        @create="(name) => $emit('create-card', name)"
+      ></addCardVue>
+      
+      
+      
+      <cardVue
+        v-for="card in list.cards"
+        :key="card.id"
+        :card="card"
+      ></cardVue>
 
   </div>
 
@@ -57,31 +67,8 @@ const closeModal = () => {
     display: flex;
     flex-direction: column;
     row-gap: 16px;
-    margin-top:100px;
     height:100%;
-    width:300px;
+    width:250px;
 }
-
-.addCard{
-    width: 100%;
-    height:50px;
-    background-color: #7FBCD2;
-    color: white;
-    border:none;
-}
-
-:hover.addCard{
-    background-color: darkgrey;
-}
-
-input, textarea{
-    padding:1rem;
-    width: 90%;
-
-}
-.input-group label{
-    display: block;
-}
-
 
 </style>

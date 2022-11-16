@@ -1,4 +1,5 @@
 <script setup>
+
 import { ref } from 'vue'
 import kanbanColumnVue from './kanbanColumn.vue';
 

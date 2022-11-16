@@ -2,58 +2,60 @@
 
 import { ref } from 'vue'
 import Modal from './Modal.vue'
+import iconMore from './icons/iconMore.vue';
 
-//Model Window
-const isColumnModalOpen = ref(false)
-const openModal = () => {
-  isColumnModalOpen.value = true
-}
-const closeModal = () => {
-    isColumnModalOpen.value = false
+const emit = defineEmits(['create'])
+
+const name = ref (null)
+const editing = ref(false)
+
+const create = () => {
+  emit('create')
 }
 
 
 </script>
 
 <template>
-
-  <button id="addColumn" @click="openModal">Add More</button>
-
-    <modal :open="isColumnModalOpen"  @close-modal="closeModal">
-      <template #header>
-        <h1>Add a New Column</h1>
-      </template>
-      <template #body>
-        <form>
-          <div class="input-group">
-            <label for="colTitle">Title</label>
-            <input type="text" name="colTitle">
-          </div>
-        </form>
-      </template>
-    </modal>
-
+  <div class="addColumn">
+    <a class="newColumnButton" href="#" @click.prevent="create">
+      <iconMore/>
+      Add Column
+    </a>
+  </div>
 </template>
 
 <style scoped>
 
-#addColumn{
-    margin-top: 25px;
-    width:100px;
-    height:30px;
-    background-color: black;
+.addColumn{
+    margin-top: 53px;
+    width:200px;
+    height:40px;
+    background-color: lightgrey;
     border: none;
-    border-radius: 5px;
     color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-input, textarea{
-    padding:1rem;
-    width: 90%;
+.newColumnButton{
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  height:100%;
+}
 
+:hover.addColumn{
+  background-color: #7FBCD2;
 }
-.input-group label{
-    display: block;
+
+a{
+  color: white;
+  text-decoration: none;
 }
+
+
 
 </style>

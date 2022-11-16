@@ -17,7 +17,6 @@ import board from './components/kanbanBoard.vue'
 
   </footer>
 
-  <!--<RouterView />-->
 </template>
 
 <style scoped>

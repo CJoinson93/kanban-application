@@ -1,22 +1,25 @@
 <script setup>
 
 import { ref } from 'vue'
-import Modal from './Modal.vue'
+import iconMore from './icons/iconMore.vue';
 
+const emit = defineEmits(['create'])
 
+const name = ref(null)
+const creating = ref (false)
 
-//Trying to add a new card
-const props = defineProps ({
-    task: String,
-})
-
-//Model Open & close
-const isModalOpen = ref(false)
-const openModal = () => {
-  isModalOpen.value = true
+const create = () => {
+  emit('create')
+  name.value = null
+  creating.value = ! creating.value
 }
-const closeModal = () => {
-    isModalOpen.value = false
+
+const save = () => {
+  if (name.value !== null && name.value.trim () !== '') {
+    emit('create', name.value)
+    name.value = null
+    creating.value = false
+  }
 }
 
 </script>
@@ -24,44 +27,44 @@ const closeModal = () => {
 <template>
 
 <!--Adding a Card Button-->
-  <button @click="openModal" class="addCard">+</button>
-
-<!--Model for adding a card-->  
-    <modal :open="isModalOpen"  @close-modal="closeModal">
-      <template #header>
-        <h1>Add a New Card</h1>
-      </template>
-      
-      <template #body>
-        <form>
-          <div class="input-group">
-            <label for="title">Task Title</label>
-              <input v-model="title" type="text" name="title">
-          </div>
-          <div class="input-group">
-            <label for="title">Task Description</label>
-            <textarea name="description"></textarea>
-          </div>
-          
-          <button @click="">Submit</button>
-        </form>    
-      </template>
-    </modal>
+  <div class="addCard">
+    <a class="addCardButton" href="#" @click="create">
+      <iconMore/>
+      Add Card
+    </a>
+    <!-- <input v-if="creating" type="text" v-model="name" placeholder="card-title" @keypress.enter="save" /> -->
+  </div>
 
 </template>
 
 <style scoped>
 
 .addCard{
-    width: 100%;
-    height:50px;
-    background-color: lightgrey;
-    color: white;
-    border:none;
+  width: 100%;
+  height:40px;
+  background-color: #7FBCD2;
+  color: white;
+  border:none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.addCardButton{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  width:100%;
+  height: 100%;
 }
 
 :hover.addCard{
     background-color: darkgrey;
+}
+
+a {
+  color: white;
 }
 
 </style>
