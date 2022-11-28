@@ -27,6 +27,9 @@ const close = () => {
         <div class="modal-body">
             <slot name="body"></slot>
         </div>
+        <div class="modal-footer">
+            <slot name="footer"></slot>
+        </div>
     </div>
 </div>
 
@@ -48,9 +51,13 @@ const close = () => {
     padding:10px;
     width: 600px;
     border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
 }
 
 .modal-heading{
+    position: relative;
     display: flex;
     flex-direction: row;
     align-items: center;

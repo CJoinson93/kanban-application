@@ -4,8 +4,9 @@ import { ref } from 'vue'
 import cardVue from './card.vue'
 import Modal from './Modal.vue'
 import addCardVue from './addCard.vue'
+import iconDelete from './icons/iconDelete.vue'
 
-const emit = defineEmits(['update-list-title'])
+const emit = defineEmits(['update-list-title', 'delete-list'])
 const editing = ref(false)
 const listTitleEdit = ref(null)
 
@@ -26,6 +27,10 @@ const saveEdit = () => {
   editing.value = false
 }
 
+const deleteList = () => {
+  emit('delete-list')
+}
+
 </script>
 
 <template>
@@ -33,6 +38,9 @@ const saveEdit = () => {
   <div id="column">
       <div class="columnTitle">
         <h2 @click="edit">{{editing ? '&nbsp;' : list.title }}</h2>
+        <div class="delete" @click="deleteList">
+        <iconDelete />
+        </div>
         <input
           v-if="editing"
           class="list__header-input"
@@ -52,9 +60,11 @@ const saveEdit = () => {
       
       
       <cardVue
-        v-for="card in list.cards"
+        v-for="(card, index) in list.cards"
         :key="card.id"
         :card="card"
+        @delete-card="$emit('delete-card', index)"
+        @update-card-title="(title) => $emit('update-card-title', index, title)"
       ></cardVue>
 
   </div>
@@ -69,6 +79,19 @@ const saveEdit = () => {
     row-gap: 16px;
     height:100%;
     width:250px;
+}
+
+.columnTitle{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.delete{
+  width:24px;
+  height:24px;
+  cursor: pointer;
 }
 
 </style>

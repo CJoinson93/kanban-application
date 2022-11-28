@@ -11,6 +11,8 @@ const props = defineProps({
     
 })
 
+const emit = defineEmits(['delete-card','update-card-title'])
+
 //Model Script
 const isModalOpen = ref(false)
 const openModal = () => {
@@ -18,7 +20,24 @@ const openModal = () => {
 }
 const closeModal = () => {
     isModalOpen.value = false
+    editingTitle.value = false
 }
+
+const saveTitle = () => {
+  emit('update-card-title', cardTitleEdit.value.value)
+  editingTitle.value = false
+}
+
+const deleteCard = () => {
+  let reallyDelete = confirm('Are you sure you want to delete this card?')
+
+  if (reallyDelete) {
+      emit('delete-card')
+  }
+}
+
+const editingTitle = ref(false)
+const cardTitleEdit = ref(null)
 
 </script>
 
@@ -26,42 +45,68 @@ const closeModal = () => {
 
 <div class="card" @click="openModal"> 
     
-    <p> {{title}} </p>
+    {{ card.title }}
 
 </div>
 
 <!--Model-->
 <Transition>
+
 <modal :open="isModalOpen"  @close-modal="closeModal">
-      <template #header>
-        <h2>Card Content</h2>
-      </template>
-      <template #body>
-        <form>
-          <div class="input-group">
-            <label for="colTitle">Title</label>
-            <input type="text" name="colTitle">
-          </div>
-        </form>
-      </template>
+  <template #header>
+    <h2 @click="editingTitle = true">{{ card.title }}</h2>
+    <input 
+      v-if="editingTitle" 
+      :value="card.title" 
+      type="text" 
+      class="editor__title" 
+      ref="cardTitleEdit"
+      @keypress.enter="saveTitle"
+    />
+  </template>
+    
+  <template #body>
+    {{card.content}}
+  </template>
+
+  <template #footer>
+    <button @click="deleteCard">Delete</button>
+  </template>
+
 </modal>
+
 </Transition>
 </template>
 
 <style scoped>
 
+.editor__title{
+  position: absolute;
+  width:100%;
+  font-size:28px;
+  background: rgb(198, 198, 198);
+  top:0;
+  left:0;
+  border:none;
+}
+
 .card{
     width:100%;
     background-color: #A5F1E9;
     height:40px;
-    border-radius: 10px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-items: center;
+    justify-content: center;
+    padding-top: 15px;
 }
 
-input, textarea{
+/*input, textarea{
     padding:1rem;
     width: 90%;
 
-}
+}*/
 .input-group label{
     display: block;
 }

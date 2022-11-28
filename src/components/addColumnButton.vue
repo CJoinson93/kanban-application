@@ -31,7 +31,7 @@ const create = () => {
     margin-top: 53px;
     width:200px;
     height:40px;
-    background-color: lightgrey;
+    background-color: #4f7380;
     border: none;
     color: white;
     display: flex;

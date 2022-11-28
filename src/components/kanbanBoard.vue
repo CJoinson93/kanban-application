@@ -41,6 +41,18 @@ const createCard = (listIndex,title) => {
     })
 }
 
+const deleteCard = (cardIndex, listIndex) => {
+    lists[listIndex].cards.splice(cardIndex, 1)
+}
+
+const deleteList = (listIndex) => {
+    lists.splice(listIndex, 1)
+}
+
+const updateCardTitle = (cardIndex, listIndex, newTitle) => {
+    lists[listIndex].cards[cardIndex].title = newTitle
+}
+
 </script>
 
 <template>
@@ -51,6 +63,9 @@ const createCard = (listIndex,title) => {
     :list="list" :key="list.id"
     @update-list-title="(title) => updateListTitle(index, title)"
     @create-card="(name) => createCard(index, name)"
+    @delete-list="() => deleteList(index)"
+    @delete-card="(cardIndex) => deleteCard(cardIndex, index)"
+    @update-card-title="(cardIndex, newTitle) => updateCardTitle(cardIndex, index, newTitle)"
     ></kanbanColumn>
 
     <addColumnButtonVue
@@ -67,7 +82,7 @@ const createCard = (listIndex,title) => {
     left:0;
     margin-top:80px ;
     padding:20px;
-    column-gap: 8px;
+    column-gap: 24px;
     display: flex;
     flex-direction: row;
     width: 100%;

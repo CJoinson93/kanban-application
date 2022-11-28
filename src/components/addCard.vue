@@ -9,7 +9,6 @@ const name = ref(null)
 const creating = ref (false)
 
 const create = () => {
-  emit('create')
   name.value = null
   creating.value = ! creating.value
 }
@@ -28,16 +27,27 @@ const save = () => {
 
 <!--Adding a Card Button-->
   <div class="addCard">
-    <a class="addCardButton" href="#" @click="create">
+    <a class="addCardButton" href="#" @click.prevent="create">
       <iconMore/>
       Add Card
     </a>
-    <!-- <input v-if="creating" type="text" v-model="name" placeholder="card-title" @keypress.enter="save" /> -->
   </div>
+  <input v-if="creating" type="text" v-model="name" placeholder="Card Title" @keypress.enter="save" />
+
 
 </template>
 
 <style scoped>
+
+input {
+  width:94%;
+  margin-top: .5rem;
+  background: #A5F1E9;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  padding: .5rem;
+}
 
 .addCard{
   width: 100%;
