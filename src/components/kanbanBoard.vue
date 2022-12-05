@@ -1,56 +1,107 @@
 <script setup>
 import { v4 as uuid } from 'uuid'
-import { reactive } from 'vue'
+import { onMounted, ref } from 'vue'
+import axios from 'axios'
 import addColumnButtonVue from './addColumnButton.vue';
 
 import kanbanColumn from './kanbanColumn.vue'
+const baseUrl = 'http://localhost/api'
 
-const lists = reactive(
-    [
-        {
-            id:uuid(),
-            title:'To do',
-            cards:
-            [
-                {
-                    id:uuid(),
-                    title:'My first card',
-                    content:'This is the content'
-                }
-            ]
-        }
-    ]
-)
+const lists = ref([])
+
+onMounted(() => {
+    loadListsFromApi()
+})
+
+const loadListsFromApi = () => {
+    axios.get(`${baseUrl}/todo-lists`)
+         .then((response) => {
+            const data = response.data.data
+            lists.value = data
+         })
+}
+
 
 const createList = () => {
-    lists.push({
-        id:new uuid(),
+    axios.post(`${baseUrl}/todo-lists`, {
         title: 'New List',
-        cards:[],
+    }) .then((response) => {
+        const list = response.data.data
+        lists.value.push(list)
     })
 }
 
-const updateListTitle = (listIndex, newTitle) => {
-    lists[listIndex].title = newTitle
+const updateListTitle = (listId, newTitle) => {
+    axios.patch(`${baseUrl}/todo-lists/${listId}`,{
+        title:newTitle,
+    }).then((response) => {
+        const data = response.data.data
+        const listIndex = getListById(listId)
+        lists.value[listIndex].title = data.title
+        })
 }
 
-const createCard = (listIndex,title) => {
-    lists[listIndex].cards.push({
-        id: uuid(),
-        title: title,
+const createCard = (listId,title) => {
+    axios.post(`${baseUrl}/cards`,{
+        title:title,
+        todo_list_id:listId,
+    }).then((response) => {
+        const listIndex = getListById(listId)
+        lists.value[listIndex].cards.push(response.data.data)
     })
 }
 
-const deleteCard = (cardIndex, listIndex) => {
-    lists[listIndex].cards.splice(cardIndex, 1)
+const deleteCard = (cardId, listIndex) => {
+    axios.delete(`${baseUrl}/cards/${cardId}`)
+    .then((resp) => {
+        for (let i = 0; i <lists.value[listIndex].cards.length; i++) {
+            if (lists.value[listIndex].cards[i].id == cardId) {
+                lists.value[listIndex].cards.splice (i, 1)
+                break
+            }
+        }
+
+    })
 }
 
-const deleteList = (listIndex) => {
-    lists.splice(listIndex, 1)
+const deleteList = (listId) => {
+    axios.delete(`${baseUrl}/todo-lists/${listId}`)
+    .then((resp) => {
+        for (let i = 0; i < lists.value.length; i++) {
+            if (lists.value[i].id == listId) {
+                lists.value.splice(i, 1)
+                break
+            }
+        }
+    })
+
+    .catch((err) => {
+        alert('Error deleting list')
+    })
+    //lists.splice(listIndex, 1)
 }
 
-const updateCardTitle = (cardIndex, listIndex, newTitle) => {
-    lists[listIndex].cards[cardIndex].title = newTitle
+const updateCardTitle = (cardId, listIndex, newTitle) => {
+    axios.patch(`${baseUrl}/cards/${cardId}`,{
+        title: newTitle,
+    }
+    )
+    .then((resp) => {
+        for (let i = 0; i < lists.value[listIndex].cards.length; i++) {
+            if (lists.value[listIndex].cards[i].id == cardId) {
+                lists.value[listIndex].cards[i].title = resp.data.data.title
+                break
+            }
+        }
+    })
+}
+
+const getListById = (id) => {
+    for (let i = 0; i <lists.value.length; i++) {
+        if (lists.value[i].id == id) {
+            return i
+        }
+    }
 }
 
 </script>
@@ -61,11 +112,11 @@ const updateCardTitle = (cardIndex, listIndex, newTitle) => {
     <kanbanColumn
     v-for="(list, index) in lists"
     :list="list" :key="list.id"
-    @update-list-title="(title) => updateListTitle(index, title)"
-    @create-card="(name) => createCard(index, name)"
-    @delete-list="() => deleteList(index)"
-    @delete-card="(cardIndex) => deleteCard(cardIndex, index)"
-    @update-card-title="(cardIndex, newTitle) => updateCardTitle(cardIndex, index, newTitle)"
+    @update-list-title="(title) => updateListTitle(list.id, title)"
+    @create-card="(name) => createCard(list.id, name)"
+    @delete-list="() => deleteList(list.id)"
+    @delete-card="(cardId) => deleteCard(cardId, index)"
+    @update-card-title="(cardId, newTitle) => updateCardTitle(cardId, index, newTitle)"
     ></kanbanColumn>
 
     <addColumnButtonVue

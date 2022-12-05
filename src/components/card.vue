@@ -1,8 +1,9 @@
 <script setup>
 
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import Modal from './Modal.vue';
 import { Transition } from 'vue';
+import axios from 'axios';
 
 const props = defineProps({
     card: {
@@ -36,6 +37,21 @@ const deleteCard = () => {
   }
 }
 
+const updateCardTitle = (cardId, listIndex, newTitle) => {
+    axios.patch(`${baseUrl}/cards/${cardId}`,{
+        title: newTitle,
+    }
+    )
+    .then((resp) => {
+        for (let i = 0; i < lists.value[listIndex].cards.length; i++) {
+            if (lists.value[listIndex].cards[i].id == cardId) {
+                lists.value[listIndex].cards[i].title = resp.data.data.title
+                break
+            }
+        }
+    })
+}
+
 const editingTitle = ref(false)
 const cardTitleEdit = ref(null)
 
@@ -61,7 +77,8 @@ const cardTitleEdit = ref(null)
       type="text" 
       class="editor__title" 
       ref="cardTitleEdit"
-      @keypress.enter="saveTitle"
+      @update-card-title="(cardId, newTitle) => updateCardTitle(cardId, index, newTitle)"
+      @keypress.enter="saveTitle"     
     />
   </template>
     
@@ -70,7 +87,7 @@ const cardTitleEdit = ref(null)
   </template>
 
   <template #footer>
-    <button @click="deleteCard">Delete</button>
+    <button id="delete" @click="deleteCard">Delete</button>
   </template>
 
 </modal>
@@ -100,6 +117,14 @@ const cardTitleEdit = ref(null)
     justify-items: center;
     justify-content: center;
     padding-top: 15px;
+}
+
+#delete{
+  background-color: red;
+  border: none;
+  padding: 10px;
+  color: white;
+  border-radius: 5px;
 }
 
 /*input, textarea{

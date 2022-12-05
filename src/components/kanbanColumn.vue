@@ -60,11 +60,11 @@ const deleteList = () => {
       
       
       <cardVue
-        v-for="(card, index) in list.cards"
+        v-for="(card, cardId) in list.cards"
         :key="card.id"
         :card="card"
-        @delete-card="$emit('delete-card', index)"
-        @update-card-title="(title) => $emit('update-card-title', index, title)"
+        @delete-card="$emit('delete-card', cardId)"
+        @update-card-title="(title) => $emit('update-card-title', cardId, title)"
       ></cardVue>
 
   </div>
