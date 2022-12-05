@@ -51,12 +51,12 @@ const createCard = (listId,title) => {
     })
 }
 
-const deleteCard = (cardId, listIndex) => {
+const deleteCard = (cardId, listId) => {
     axios.delete(`${baseUrl}/cards/${cardId}`)
     .then((resp) => {
-        for (let i = 0; i <lists.value[listIndex].cards.length; i++) {
-            if (lists.value[listIndex].cards[i].id == cardId) {
-                lists.value[listIndex].cards.splice (i, 1)
+        for (let i = 0; i <lists.value[listId].cards.length; i++) {
+            if (lists.value[listId].cards[i].id == cardId) {
+                lists.value[listId].cards.splice (i, 1)
                 break
             }
         }
@@ -81,15 +81,15 @@ const deleteList = (listId) => {
     //lists.splice(listIndex, 1)
 }
 
-const updateCardTitle = (cardId, listIndex, newTitle) => {
+const updateCardTitle = (cardId, listId, newTitle) => {
     axios.patch(`${baseUrl}/cards/${cardId}`,{
         title: newTitle,
     }
     )
     .then((resp) => {
-        for (let i = 0; i < lists.value[listIndex].cards.length; i++) {
-            if (lists.value[listIndex].cards[i].id == cardId) {
-                lists.value[listIndex].cards[i].title = resp.data.data.title
+        for (let i = 0; i < lists.value[listId].cards.length; i++) {
+            if (lists.value[listId].cards[i].id == cardId) {
+                lists.value[listId].cards[i].title = resp.data.data.title
                 break
             }
         }
@@ -102,6 +102,10 @@ const getListById = (id) => {
             return i
         }
     }
+}
+
+const updateCardDescription = (cardId, listId, newDescription) => {
+    lists[listId].cards[cardId].content = newDescription
 }
 
 </script>
@@ -117,6 +121,7 @@ const getListById = (id) => {
     @delete-list="() => deleteList(list.id)"
     @delete-card="(cardId) => deleteCard(cardId, index)"
     @update-card-title="(cardId, newTitle) => updateCardTitle(cardId, index, newTitle)"
+    @update-card-description="(cardId, newDescription) => updateCardDescription(cardId, index, newDescription)"
     ></kanbanColumn>
 
     <addColumnButtonVue

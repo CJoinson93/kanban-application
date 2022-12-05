@@ -64,6 +64,13 @@ const close = () => {
     justify-content: space-between;
 }
 
+.modal-footer{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  
+
 
 
 </style>

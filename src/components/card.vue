@@ -22,12 +22,19 @@ const openModal = () => {
 const closeModal = () => {
     isModalOpen.value = false
     editingTitle.value = false
+    editingDescription.value = false
 }
 
 const saveTitle = () => {
   emit('update-card-title', cardTitleEdit.value.value)
   editingTitle.value = false
 }
+
+const saveDescription = () => {
+  emit('update-card-description', cardDescriptionEdit.value.value)
+  editingDescription.value = false
+}
+
 
 const deleteCard = () => {
   let reallyDelete = confirm('Are you sure you want to delete this card?')
@@ -37,15 +44,15 @@ const deleteCard = () => {
   }
 }
 
-const updateCardTitle = (cardId, listIndex, newTitle) => {
+const updateCardTitle = (cardId, listId, newTitle) => {
     axios.patch(`${baseUrl}/cards/${cardId}`,{
         title: newTitle,
     }
     )
     .then((resp) => {
-        for (let i = 0; i < lists.value[listIndex].cards.length; i++) {
-            if (lists.value[listIndex].cards[i].id == cardId) {
-                lists.value[listIndex].cards[i].title = resp.data.data.title
+        for (let i = 0; i < lists.value[listId].cards.length; i++) {
+            if (lists.value[listId].cards[i].id == cardId) {
+                lists.value[listId].cards[i].title = resp.data.data.title
                 break
             }
         }
@@ -54,6 +61,8 @@ const updateCardTitle = (cardId, listIndex, newTitle) => {
 
 const editingTitle = ref(false)
 const cardTitleEdit = ref(null)
+const editingDescription = ref(false)
+const cardDescriptionEdit = ref(null)
 
 </script>
 
@@ -83,11 +92,15 @@ const cardTitleEdit = ref(null)
   </template>
     
   <template #body>
-    {{card.content}}
+    <div v-if="!editingDescription" @click="editingDescription = true">{{ card.content }}</div>
+    <textarea v-else :value="card.content" ref="cardDescriptionEdit"></textarea>
   </template>
 
   <template #footer>
-    <button id="delete" @click="deleteCard">Delete</button>
+   
+   <button id="delete" @click="deleteCard">Delete Task</button>
+   <button id="save" v-if="editingDescription" @click="saveDescription">Save Task</button>
+
   </template>
 
 </modal>
@@ -125,6 +138,22 @@ const cardTitleEdit = ref(null)
   padding: 10px;
   color: white;
   border-radius: 5px;
+}
+
+#save{
+  background-color: rgb(0, 170, 255);
+  border: none;
+  padding: 10px;
+  color: white;
+  border-radius: 5px;
+}
+
+textarea {
+  width: 100%;
+  min-height: 200px;
+  border-radius: 3px;
+  font-family: sans-serif;
+  border: 2px solid rgb(0, 238, 255);
 }
 
 /*input, textarea{

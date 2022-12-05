@@ -28,7 +28,12 @@ const saveEdit = () => {
 }
 
 const deleteList = () => {
-  emit('delete-list')
+  let reallyDelete = confirm('Are you shure you want to delete this list?')
+  
+  if (reallyDelete){
+    emit('delete-list')
+  }
+
 }
 
 </script>
@@ -65,6 +70,7 @@ const deleteList = () => {
         :card="card"
         @delete-card="$emit('delete-card', cardId)"
         @update-card-title="(title) => $emit('update-card-title', cardId, title)"
+        @update-card-description="(description) => $emit('update-card-description', index, description)"
       ></cardVue>
 
   </div>
@@ -86,6 +92,15 @@ const deleteList = () => {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+}
+
+.list__header-input{
+  position: absolute;
+  width: 250px;
+  height:30px;
+  background: rgb(198, 198, 198);
+  border: none;
+  font-size: 28px;
 }
 
 .delete{
