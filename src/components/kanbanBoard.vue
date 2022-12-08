@@ -78,7 +78,6 @@ const deleteList = (listId) => {
     .catch((err) => {
         alert('Error deleting list')
     })
-    //lists.splice(listIndex, 1)
 }
 
 const updateCardTitle = (cardId, listId, newTitle) => {
